@@ -4,28 +4,7 @@ export default {
     data: {
         todolist: [
             {
-                title: 'Workout'
-            },
-            {
-                title: 'Meditation'
-            },
-            {
-                title: 'Cooking'
-            },
-            {
-                title: 'Study'
-            },
-            {
-                title: 'Reading'
-            },
-            {
-                title: 'Language Practice'
-            },
-            {
-                title: 'Deep Work'
-            },
-            {
-                title: 'Homework'
+                title: '1 min test'
             }
         ]
     },

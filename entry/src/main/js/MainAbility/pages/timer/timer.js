@@ -1,63 +1,53 @@
 import Vibrator from '@system.vibrator';
 
-let tick = null;
+var tick = null;
 
 export default {
     data: {
-        total: 1800,
-        timeText: '30:00',
-        remaining: 1800,
+        total: 60,
+        timeText: '01:00',
+        remaining: 60,
         percent: 0,
         running: false,
         vib30Done: false
     },
 
-    onInit() {
-        this.start();
+    onDestroy() {
+        this.pause();
     },
 
-    onShow() {
-        this.start();
+    updateDisplay() {
+        var minutes = Math.floor(this.remaining / 60);
+        var seconds = this.remaining % 60;
+        var mm = minutes < 10 ? '0' + minutes : String(minutes);
+        var ss = seconds < 10 ? '0' + seconds : String(seconds);
+
+        this.timeText = mm + ':' + ss;
+        this.percent = Math.floor(((this.total - this.remaining) / this.total) * 100);
     },
 
     start() {
-        if (this.running) {
+        if (this.running || this.remaining === 0) {
             return;
         }
 
         this.running = true;
 
-        let timer = this.remaining;
-        const total = this.total;
+        var self = this;
+        tick = setInterval(function () {
+            self.remaining -= 1;
+            self.updateDisplay();
 
-        tick = setInterval(() => {
-            if (!this.vib30Done && timer <= 30 && timer > 0) {
+            if (!self.vib30Done && self.remaining === 30) {
                 try {
                     Vibrator.vibrate({ mode: 'short' });
-                    this.vib30Done = true;
+                    self.vib30Done = true;
                 } catch (e) {
                 }
             }
 
-            const minutes = Math.floor(timer / 60);
-            const seconds = timer % 60;
-
-            const mm = minutes < 10 ? `0${minutes}` : String(minutes);
-            const ss = seconds < 10 ? `0${seconds}` : String(seconds);
-
-            this.timeText = `${mm}:${ss}`;
-            this.percent = Math.min(100, Math.floor(((total - timer) / total) * 100));
-            this.remaining = timer;
-
-            timer -= 1;
-            if (timer < 0) {
-                clearInterval(tick);
-                tick = null;
-                this.running = false;
-                this.timeText = 'Finished!';
-                this.percent = 100;
-                this.remaining = 0;
-
+            if (self.remaining === 0) {
+                self.pause();
                 try {
                     Vibrator.vibrate({ mode: 'long' });
                 } catch (e) {
@@ -67,7 +57,7 @@ export default {
     },
 
     pause() {
-        if (tick) {
+        if (tick !== null) {
             clearInterval(tick);
             tick = null;
         }
@@ -77,8 +67,7 @@ export default {
     reset() {
         this.pause();
         this.remaining = this.total;
-        this.timeText = '30:00';
-        this.percent = 0;
+        this.updateDisplay();
         this.vib30Done = false;
     }
 };

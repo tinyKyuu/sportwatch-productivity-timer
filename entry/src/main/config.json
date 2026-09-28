@@ -1,7 +1,7 @@
 {
   "app": {
-	"bundleName": "com.hmosdemos.lite_wearable.productivity_timer",
-	"vendor": "hmosdemos",
+	"bundleName": "de.tinykyuu.fit3.timer",
+	"vendor": "tinyKyuu",
 	"version": {
 	  "code": 1000000,
 	  "name": "1.0.0"

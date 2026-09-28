@@ -1,5 +1,5 @@
 <div class="container">
-    <text class="main-title">Timer List</text>
+    <text class="main-title">Timer Test</text>
     <list class="todo-wrapper">
         <list-item for="{{ (index, item) in todolist }}" tid="id" class="todo-item" onclick="pushPage">
             <text class="todo-title" onclick="pushPage"> {{ item.title }} </text>

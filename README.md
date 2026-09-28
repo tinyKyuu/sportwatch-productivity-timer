@@ -2,6 +2,11 @@
 
 # Sportwatch Productivity Timer
 
+> **Watch Fit 3 smoke-test branch:** This branch temporarily runs a one-minute
+> timer to test installation, countdown, pause/reset, and vibration before any
+> multi-timer redesign. See [FIT3-TEST.md](FIT3-TEST.md). The upstream feature
+> description below refers to the original 30-minute app.
+
 ProductivityTimer is a lightweight HarmonyOS Lite Wearable application designed to help users manage tasks and stay focused through a simple countdown timer experience.
 
 The app includes two main screens: a task list and a timer screen. The task list shows activities that may need time tracking, such as meetings or study sessions, and tapping on any item opens the timer. The timer screen starts a 30-minute countdown, displays the remaining time with a progress bar, and lets the user start, pause, or reset the timer. The watch vibrates once when 30 seconds remain and again when the countdown finishes.
