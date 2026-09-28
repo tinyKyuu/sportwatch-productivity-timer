@@ -57,6 +57,7 @@ __pycache__/
 ############################
 .gradle/
 .externalNativeBuild/
+.local-sdk/
  
 ############################
 # Editor & system junk

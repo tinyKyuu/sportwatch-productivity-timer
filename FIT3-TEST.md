@@ -16,9 +16,25 @@ format installed where a newer DevEco build did not. That is useful evidence,
 1. Use Huawei's official **DevEco Studio 3.1.1 Release, Mac (ARM)** archive
    (`devecostudio-mac-arm-3.1.0.501.zip`). Open this directory as a Gradle
    project. Do not use the separate `fit3-smoke-test` Hvigor branch in 3.1.
-2. In the SDK Manager, install HarmonyOS **2.2.0 (API 6)** for Lite Wearable.
-   Try a **debug build without signing** first. Do not publish the app.
-3. If DevEco offers a Lite Wearable simulator, run the app there and check
+2. Install HarmonyOS **2.2.0 (API 6)** for Lite Wearable. On the test Mac,
+   DevEco's SDK Manager could not reach its catalog, so the official Huawei
+   Mac API 6 JS, Java, and toolchains archives were unpacked into the
+   Git-ignored `.local-sdk/hmscore/2.2.0/` directory. The archived JS loader
+   also needed its lockfile-pinned npm dependencies. Its obsolete Huawei-only
+   `deccjsunit` test package was excluded locally; other Huawei-internal
+   registry URLs were replaced with public npm URLs while retaining their
+   integrity hashes. These changes are to the ignored SDK copy, not app code.
+3. Use Node **16** for this older Gradle project (the test Mac used the
+   verified official Node 16.19.1 archive). Set `NODE_HOME`, `JAVA_HOME`,
+   `GRADLE_USER_HOME`, and `NODE_PATH` as needed, then run
+   `./gradlew assembleDebug --offline --no-daemon`. `NODE_PATH` pointed to
+   `js/build-tools/ace-loader/node_modules/webpack-cli/node_modules` because
+   Huawei's loader imports its nested `yargs` dependency directly.
+4. The first successful debug build is **unsigned**. It produces
+   `entry/build/outputs/bin/debug/entry-debug-unsigned.bin` and
+   `entry/build/outputs/hap/debug/entry-bin-debug-lite-unsigned.hap`. Do not
+   publish the app.
+5. If DevEco offers a Lite Wearable simulator, run the app there and check
    Start, Pause, Reset, and completion. Simulator vibration may not represent
    the physical watch.
 
@@ -32,23 +48,21 @@ profiles out of Git.
 
 A Lite Wearable HAP is a ZIP container containing a Huawei app `.bin` payload.
 Gadgetbridge's Huawei app installer parses the **`.bin` payload**, not the HAP
-container. After building a signed Lite Wearable HAP, check it with:
+container. The debug build already exposes the `.bin` directly. Check it with:
 
 ```sh
-node scripts/check-gadgetbridge-package.mjs /path/to/signed-lite-wearable.hap
-unzip -Z1 /path/to/signed-lite-wearable.hap
-unzip -p /path/to/signed-lite-wearable.hap ACTUAL_BIN_ENTRY_NAME > /path/to/timer-test.bin
+node scripts/check-gadgetbridge-package.mjs entry/build/outputs/bin/debug/entry-debug-unsigned.bin
 ```
 
-Replace `ACTUAL_BIN_ENTRY_NAME` with the `.bin` entry shown by `unzip -Z1`.
-The check
-script confirms that the binary has the header and `config.json` structure
-Gadgetbridge expects; it **cannot** prove that the watch will accept the
-signature or that this firmware allows sideloading.
+The check script confirms that the binary has the header and `config.json`
+structure Gadgetbridge expects; it **cannot** prove that the watch will accept
+an unsigned build or that this firmware allows sideloading.
 
-Copy `timer-test.bin` to the Android phone, connect the watch in Gadgetbridge,
-then open its **File Installer** and choose the `.bin`. If Gadgetbridge rejects
-the file or the watch rejects the transfer, stop and record the exact message.
+Copy `entry-debug-unsigned.bin` to the Android phone, connect the watch in
+Gadgetbridge, then open its **File Installer** and choose the `.bin`. If
+Gadgetbridge rejects the file or the watch rejects the transfer, stop and
+record the exact message. A refusal may mean a signed build and a provision
+profile are needed; do not try to bypass watch signature checks.
 Do not update the watch firmware or reset its pairing for this test.
 
 If the installed app opens, test on the watch in this order:
