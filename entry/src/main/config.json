@@ -19,9 +19,7 @@
 	},
 	"abilities": [
 	  {
-		"name": ".MainAbility",
-		"srcLanguage": "js",
-		"srcPath": "MainAbility",
+		"name": "default",
 		"icon": "$media:icon",
 		"description": "$string:MainAbility_desc",
 		"label": "$string:MainAbility_label",
@@ -34,7 +32,7 @@
 			"pages/index/index",
 			"pages/timer/timer"
 		],
-		"name": ".MainAbility"
+		"name": "default"
 	  }
 	],
 	  "reqPermissions": [

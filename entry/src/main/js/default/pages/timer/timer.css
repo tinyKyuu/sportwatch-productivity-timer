@@ -1,0 +1,31 @@
+.container {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.time {
+    font-size: 36px;
+    color: #ffffff;
+}
+
+.bar {
+    width: 80%;
+    height: 20px;
+    margin: 16px 0;
+}
+
+.div-button {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 65%;
+}
+
+.button {
+    margin-top: 8px;
+    width: 70%;
+    height: 40px;
+}

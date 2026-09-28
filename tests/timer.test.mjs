@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { runInNewContext } from 'node:vm';
 import test from 'node:test';
 
-const sourcePath = fileURLToPath(new URL('../entry/src/main/js/MainAbility/pages/timer/timer.js', import.meta.url));
+const sourcePath = fileURLToPath(new URL('../entry/src/main/js/default/pages/timer/timer.js', import.meta.url));
 const source = readFileSync(sourcePath, 'utf8')
     .replace("import Vibrator from '@system.vibrator';", '')
     .replace('export default {', 'module.exports = {');

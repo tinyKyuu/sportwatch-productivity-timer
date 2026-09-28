@@ -6,25 +6,27 @@ at `01:00`, waits for **Start**, supports **Pause** and **Reset**, vibrates at
 without Huawei tools using `node --test tests/timer.test.mjs`.
 
 Target watch: Huawei Watch Fit 3, observed firmware `5.0.0.29 (C00M06)`.
-The project now declares `compatibleSdkVersion: 5.0.0(12)` instead of the
-upstream `5.1.0(18)`. This is a first compatibility hypothesis, **not** a
-confirmed mapping between the watch firmware number and SDK API level.
+This branch uses the older Gradle-based HarmonyOS **API 6** Lite Wearable
+project format. A first-hand report for the same watch firmware says this
+format installed where a newer DevEco build did not. That is useful evidence,
+**not** confirmation that this timer package will install through Gadgetbridge.
 
 ## Build and simulator
 
-1. Open this directory as a project in DevEco Studio **5.1.1 for Mac ARM64**.
-2. Install the HarmonyOS SDK version requested by the project, then try a
-   **debug build without signing**. Do not publish the app.
+1. Use Huawei's official **DevEco Studio 3.1.1 Release, Mac (ARM)** archive
+   (`devecostudio-mac-arm-3.1.0.501.zip`). Open this directory as a Gradle
+   project. Do not use the separate `fit3-smoke-test` Hvigor branch in 3.1.
+2. In the SDK Manager, install HarmonyOS **2.2.0 (API 6)** for Lite Wearable.
+   Try a **debug build without signing** first. Do not publish the app.
 3. If DevEco offers a Lite Wearable simulator, run the app there and check
    Start, Pause, Reset, and completion. Simulator vibration may not represent
    the physical watch.
 
-The original project had a `signingConfig: "default"` reference but no
-corresponding signing configuration. It has been removed so unsigned simulator
-builds do not depend on private signing material. For the real watch, a
-Huawei debug certificate and provision profile for
-`de.tinykyuu.fit3.timer` may still be required. Keep keystores and profiles
-out of Git.
+The older Gradle project deliberately has no signing material. For the real
+watch, a Huawei debug certificate and provision profile for
+`de.tinykyuu.fit3.timer` and this watch's UDID may be required. This is a
+development-signing step, not AppGallery publication. Keep keystores and
+profiles out of Git.
 
 ## Prepare the Gadgetbridge file
 
@@ -33,12 +35,13 @@ Gadgetbridge's Huawei app installer parses the **`.bin` payload**, not the HAP
 container. After building a signed Lite Wearable HAP, check it with:
 
 ```sh
-node scripts/check-gadgetbridge-package.mjs /path/to/entry-default-signed.hap
-unzip -Z1 /path/to/entry-default-signed.hap
-unzip -p /path/to/entry-default-signed.hap entry-default-signed.bin > /path/to/timer-test.bin
+node scripts/check-gadgetbridge-package.mjs /path/to/signed-lite-wearable.hap
+unzip -Z1 /path/to/signed-lite-wearable.hap
+unzip -p /path/to/signed-lite-wearable.hap ACTUAL_BIN_ENTRY_NAME > /path/to/timer-test.bin
 ```
 
-Use the actual `.bin` entry name shown by `unzip -Z1` if it differs. The check
+Replace `ACTUAL_BIN_ENTRY_NAME` with the `.bin` entry shown by `unzip -Z1`.
+The check
 script confirms that the binary has the header and `config.json` structure
 Gadgetbridge expects; it **cannot** prove that the watch will accept the
 signature or that this firmware allows sideloading.

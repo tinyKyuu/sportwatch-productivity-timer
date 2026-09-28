@@ -2,10 +2,11 @@
 
 # Sportwatch Productivity Timer
 
-> **Watch Fit 3 smoke-test branch:** This branch temporarily runs a one-minute
-> timer to test installation, countdown, pause/reset, and vibration before any
-> multi-timer redesign. See [FIT3-TEST.md](FIT3-TEST.md). The upstream feature
-> description below refers to the original 30-minute app.
+> **Watch Fit 3 API 6 smoke-test branch:** This branch temporarily runs a
+> one-minute timer to test installation, countdown, pause/reset, and vibration
+> before any multi-timer redesign. It uses DevEco Studio 3.1's Gradle format;
+> see [FIT3-TEST.md](FIT3-TEST.md). The upstream feature description below
+> refers to the original 30-minute app, not this test build.
 
 ProductivityTimer is a lightweight HarmonyOS Lite Wearable application designed to help users manage tasks and stay focused through a simple countdown timer experience.
 
